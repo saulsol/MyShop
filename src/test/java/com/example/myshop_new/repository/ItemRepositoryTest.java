@@ -2,6 +2,9 @@ package com.example.myshop_new.repository;
 
 import com.example.myshop_new.constant.ItemSellStatus;
 import com.example.myshop_new.entity.Item;
+import com.example.myshop_new.entity.QItem;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,6 +23,9 @@ class ItemRepositoryTest {
 
     @Autowired
     private ItemRepository itemRepository;
+
+    @PersistenceContext
+    EntityManager entityManager;
 
     private void createItemList(){
         for(int i=0; i<100; i++){
@@ -71,6 +79,30 @@ class ItemRepositoryTest {
             System.out.println(item.getId());
         }
     }
+
+    @Test
+    @DisplayName("QueryDsl 조회 테스트1")
+    public void queryDslTest(){
+        this.createItemList();
+
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QItem qItem = QItem.item; // Item 엔티티 갖고온다.
+
+        JPAQuery<Item> query = queryFactory.selectFrom(qItem)
+                .where(qItem.itemSellStatus.eq(ItemSellStatus.SELL))
+                .where(qItem.itemDetail.like("%"+"좋은"+"%"))
+                .orderBy(qItem.price.desc());
+        // Repository 에 JPQL 또는 쿼리 메소드를 만들지 않아도 동적으로 쿼리 생성해줌
+
+        List<Item> itemList = query.fetch();
+        System.out.println(itemList);
+        for (Item item : itemList) {
+            System.out.println(" ::: 여기 : "+item.getId());
+        }
+
+
+    }
+
 
 
 
