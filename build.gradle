@@ -30,10 +30,15 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mockito:mockito-all:1.9.5'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // Thymeleaf
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
     // queryDSL 설정
     implementation "com.querydsl:querydsl-jpa:5.0.0"
     implementation "com.querydsl:querydsl-apt:5.0.0"
+
+    //Spring Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 // Querydsl 설정부
