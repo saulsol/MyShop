@@ -3,6 +3,7 @@ package com.example.myshop_new.repository;
 import com.example.myshop_new.constant.ItemSellStatus;
 import com.example.myshop_new.entity.Item;
 import com.example.myshop_new.entity.QItem;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.DisplayName;
@@ -95,10 +96,23 @@ class ItemRepositoryTest {
         // Repository 에 JPQL 또는 쿼리 메소드를 만들지 않아도 동적으로 쿼리 생성해줌
 
         List<Item> itemList = query.fetch();
+        // fetch() 메소드 실행 시점에 쿼리문이 생성된다.
+
         System.out.println(itemList);
         for (Item item : itemList) {
             System.out.println(" ::: 여기 : "+item.getId());
         }
+
+
+    }
+
+    @Test
+    @DisplayName("QueryDsl 조회 테스트2")
+    public void queryDslTest2(){
+        this.createItemList();
+
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QItem qItem = QItem.item;
 
 
     }
