@@ -4,11 +4,15 @@ import com.example.myshop_new.dto.MemberFormDto;
 import com.example.myshop_new.entity.Member;
 import com.example.myshop_new.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.validation.Valid;
 
 
 @Controller
@@ -26,9 +30,20 @@ public class MemberController {
     }
 
     @PostMapping("/new")
-    public String postMemberForm(MemberFormDto memberFormDto) {
-        memberService.saveMember(memberFormDto);
-        // 메인 페이지로 리다이렉션
+    public String postMemberForm(@Valid MemberFormDto memberFormDto,
+                                 BindingResult bindingResult, Model model) {
+
+        if(bindingResult.hasErrors()){
+            return "member/memberForm";
+        }
+
+        try {
+            memberService.saveMember(memberFormDto);
+        }catch (IllegalStateException e){
+            model.addAttribute("errorMessage", e.getMessage());
+            return "member/memberForm";
+        }
+
         return "redirect:/";
     }
 
