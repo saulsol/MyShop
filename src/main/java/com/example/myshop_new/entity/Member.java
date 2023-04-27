@@ -3,6 +3,7 @@ package com.example.myshop_new.entity;
 import com.example.myshop_new.constant.Role;
 import com.example.myshop_new.dto.MemberFormDto;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "member")
+@Getter
 @NoArgsConstructor
 public class Member {
 

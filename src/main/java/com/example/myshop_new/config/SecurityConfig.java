@@ -18,13 +18,13 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         // httpSecurity 객체 -> 세부적인 보안 기능을 설정할 수 있는 API 제공
         httpSecurity.formLogin()
-                .loginPage("/members/login")
-                .defaultSuccessUrl("/")
-                .usernameParameter("email")
-                .failureUrl("/members/login/error")
+                .loginPage("/members/login") // 로그인 페이지 URL 설정
+                .defaultSuccessUrl("/") // 로그인 성공 시 이동할 URL 설정
+                .usernameParameter("email") // -> UserDetail 객체에서 검증하기 위해, 로그인 시 사용할 파라미터 이름 email 지정
+                .failureUrl("/members/login/error") // 로그인 실패 시 이동할 URL 지정
                 .and()
                 .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
+                .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout")) // 로그아웃 URL 성공 시 이동할 URl 설정
                 .logoutSuccessUrl("/")
         ;
 

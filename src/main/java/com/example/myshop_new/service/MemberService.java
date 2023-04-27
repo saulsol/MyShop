@@ -5,6 +5,10 @@ import com.example.myshop_new.entity.Member;
 import com.example.myshop_new.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +19,7 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
-public class MemberService {
+public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
@@ -35,6 +39,21 @@ public class MemberService {
              log.info("{} 새로운 이메일", memberEmail);
          }
 
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException { // email 로 변경
+           Member member = memberRepository.findByEmail(email).orElseThrow(()->new IllegalStateException(email));
+
+            if(member == null){
+                throw new UsernameNotFoundException(email);
+            }
+
+        return User.builder()
+                .username(member.getEmail())
+                .password(member.getPassword()) // 이미 인코딩 된 값
+                .roles(member.getRole().toString())
+                .build();
     }
 
 }
