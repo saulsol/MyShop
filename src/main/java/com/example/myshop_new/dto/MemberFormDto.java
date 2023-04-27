@@ -3,9 +3,10 @@ package com.example.myshop_new.dto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-@Builder
+@Setter
 public class MemberFormDto {
 
      private String name;
